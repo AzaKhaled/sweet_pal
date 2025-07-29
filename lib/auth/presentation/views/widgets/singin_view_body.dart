@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sweet_pal/auth/presentation/cubits/signin/signin_cubit.dart';
+import 'package:sweet_pal/auth/presentation/views/singup_view.dart';
+import 'package:sweet_pal/auth/presentation/views/widgets/have_an_account_section.dart';
+import 'package:sweet_pal/auth/presentation/views/widgets/or_divider.dart';
+import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
+import 'package:sweet_pal/core/utils/app_text_styles.dart';
+import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
+import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
+
+class SigninViewBody extends StatefulWidget {
+  const SigninViewBody({super.key});
+
+  @override
+  State<SigninViewBody> createState() => _SigninViewBodyState();
+}
+
+class _SigninViewBodyState extends State<SigninViewBody> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  late String email, password;
+  late bool isTermsAccepted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: formKey,
+            autovalidateMode: autovalidateMode,
+            child: Column(
+              children: [
+                SizedBox(height: 16.h),
+
+                Text('Welcome Back!', style: TextStyles.montserrat700_36),
+                SizedBox(height: 24.h),
+                CustomTextFormField(
+                  onSaved: (value) {
+                    email = value!;
+                  },
+                  preffixIcon: const Icon(Icons.person_rounded),
+                  hintText: 'Username or Email',
+                  textInputType: TextInputType.name,
+                ),
+
+                SizedBox(height: 16.h),
+                PasswordField(
+                  hintText: 'Password',
+                  onSaved: (value) {
+                    password = value!;
+                  },
+                ),
+
+                SizedBox(height: 30.h),
+                CustomButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      formKey.currentState!.save();
+
+                      context.read<SigninCubit>().signIn(email, password);
+                    } else {
+                      autovalidateMode = AutovalidateMode.always;
+                      setState(() {});
+                    }
+                  },
+
+                  text: 'Login',
+                ),
+                SizedBox(height: 16.h),
+                const OrDivider(),
+                
+                SizedBox(height: 16.h),
+                HaveAnAccountSection(
+                  leadingText: 'Create An Account ',
+                  actionText: 'Sign Up',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SingUpView(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
