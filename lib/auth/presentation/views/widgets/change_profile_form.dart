@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/auth/presentation/cubits/profile/profile_cubit.dart';
+import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
+import 'package:sweet_pal/core/utils/app_colors.dart';
 
 class ChangeProfileForm extends StatefulWidget {
   const ChangeProfileForm({super.key});
@@ -13,12 +16,45 @@ class ChangeProfileForm extends StatefulWidget {
 
 class _ChangeProfileFormState extends State<ChangeProfileForm> {
   File? _image;
+  String? _currentAvatarUrl;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _password = TextEditingController();
-  final TextEditingController _confirm = TextEditingController();
+
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  bool _isUploading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUserData();
+  }
+
+  Future<void> _loadCurrentUserData() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
+      final response = await Supabase.instance.client
+          .from('users')
+          .select()
+          .eq('auth_id', user.id)
+          .maybeSingle();
+
+      if (response != null && mounted) {
+        setState(() {
+          _currentAvatarUrl = response['avatar_url'];
+        });
+      }
+    }
+  }
 
   Future<void> _pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
     if (picked != null) {
       setState(() => _image = File(picked.path));
     }
@@ -32,73 +68,202 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
       listener: (context, state) {
         if (state is ProfileSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
+            SnackBar(
+              content: Center(child: Text(state.message)),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is ProfileError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error)),
+            SnackBar(
+              content: Center(child: Text(state.error)),
+              backgroundColor: Colors.red,
+            ),
           );
         }
       },
       builder: (context, state) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               GestureDetector(
                 onTap: _pickImage,
                 child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: _image != null ? FileImage(_image!) : null,
-                  child: _image == null
-                      ? const Icon(Icons.camera_alt, size: 30)
+                  radius: 60,
+                  backgroundImage: _image != null
+                      ? FileImage(_image!)
+                      : (_currentAvatarUrl != null &&
+                              _currentAvatarUrl!.isNotEmpty)
+                          ? NetworkImage(_currentAvatarUrl!)
+                          : const AssetImage('assets/images/person.png')
+                              as ImageProvider,
+                  child: _image == null &&
+                          (_currentAvatarUrl == null ||
+                              _currentAvatarUrl!.isEmpty)
+                      ? const Icon(
+                          Icons.camera_alt,
+                          size: 40,
+                          color: Colors.grey,
+                        )
                       : null,
                 ),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _image != null
-                    ? () => cubit.updateProfileImage(_image!)
-                    : null,
-                child: const Text('تحديث الصورة'),
+              const SizedBox(height: 12),
+              const Text(
+                'Change image',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
-              const SizedBox(height: 32),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _password,
-                      obscureText: true,
-                      decoration:
-                          const InputDecoration(labelText: 'كلمة المرور الجديدة'),
-                      validator: (value) =>
-                          value != null && value.length < 6
-                              ? 'كلمة المرور قصيرة'
-                              : null,
+              const SizedBox(height: 20),
+              if (_image != null)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _isUploading
+                        ? null
+                        : () async {
+                            setState(() => _isUploading = true);
+                            await cubit.uploadImage(_image!);
+                            setState(() => _isUploading = false);
+                          },
+                    label: Text(_isUploading ? 'Uploading...' : 'Upload Image'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _confirm,
-                      obscureText: true,
-                      decoration:
-                          const InputDecoration(labelText: 'تأكيد كلمة المرور'),
-                      validator: (value) =>
-                          value != _password.text ? 'كلمتا المرور غير متطابقتين' : null,
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          cubit.changePassword(_password.text);
-                        }
-                      },
-                      child: const Text('تغيير كلمة المرور'),
+                  ),
+                ),
+              const SizedBox(height: 30),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Change Password',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Current Password
+                      PasswordField(
+                        controller: _currentPasswordController,
+                        hintText: 'Current Password',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your current password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // New Password
+                      PasswordField(
+                        controller: _newPasswordController,
+                        hintText: 'New Password',
+                        validator: (value) {
+                          if (value == null || value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Confirm Password
+                      PasswordField(
+                        controller: _confirmPasswordController,
+                        hintText: 'Confirm Password',
+                        validator: (value) {
+                          if (value != _newPasswordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final user =
+                                  Supabase.instance.client.auth.currentUser;
+                              if (user != null) {
+                                try {
+                                  final response = await Supabase.instance.client
+                                      .auth
+                                      .signInWithPassword(
+                                          email: user.email!,
+                                          password: _currentPasswordController
+                                              .text);
+
+                                  if (response.user != null) {
+                                    cubit.changePassword(
+                                        _newPasswordController.text);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Center(child: Text('Current password is incorrect')),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Center(child: Text('Current password is incorrect')),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text('Change password'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              if (state is ProfileLoading) const CircularProgressIndicator(),
+              if (state is ProfileLoading)
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
             ],
           ),
         );

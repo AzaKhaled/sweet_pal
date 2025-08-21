@@ -23,7 +23,7 @@ class SignInViewBodyBlocConsumer extends StatelessWidget {
           );
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeView()),
+            MaterialPageRoute(builder: (context) => const HomeView()),
           );
         }
         if (state is SigninFailure) {
@@ -34,7 +34,7 @@ class SignInViewBodyBlocConsumer extends StatelessWidget {
         return CustomProgressHUD(
           
           isLoading: state is SigninLoading ? true : false,
-          child: SigninViewBody(),
+          child: const SigninViewBody(),
         );
       },
     );

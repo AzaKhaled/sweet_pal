@@ -74,20 +74,25 @@ class SupabaseAuthService {
   }
 }
 
-  Future<Map<String, dynamic>> getCurrentUserData() async {
-    final user = _client.auth.currentUser;
-    if (user == null) {
-      throw CustomException(message: 'User not logged in.');
-    }
-
-    final response = await _client
-        .from('users')
-        .select()
-        .eq('auth_id', user.id)
-        .single();
-
-    return response;
+ Future<Map<String, dynamic>> getCurrentUserData() async {
+  final user = _client.auth.currentUser;
+  if (user == null) {
+    throw CustomException(message: 'User not logged in.');
   }
+
+  final response = await _client
+      .from('users')
+      .select()
+      .eq('auth_id', user.id)
+      .maybeSingle(); 
+      
+
+  if (response == null) {
+    throw CustomException(message: 'User not found in database.');
+  }
+
+  return response;
+}
 
   Future<List<Map<String, dynamic>>> fetchCategoriesWithProducts() async {
     final response = await Supabase.instance.client
@@ -139,4 +144,6 @@ Future<void> changePassword(String newPassword) async {
   }
 }
 
-}
+}   
+
+

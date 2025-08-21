@@ -10,11 +10,10 @@ class SiginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SigninCubit(getIt<AuthRepo>()),
-      child: Scaffold(
-      
-        body: const SignInViewBodyBlocConsumer(),
+    return RepaintBoundary(
+      child: BlocProvider(
+        create: (context) => SigninCubit(getIt<AuthRepo>()),
+        child: const Scaffold(body: SignInViewBodyBlocConsumer()),
       ),
     );
   }

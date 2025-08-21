@@ -20,7 +20,7 @@ class SmoothPageindicators extends StatelessWidget {
         count: totalPages,
         effect: WormEffect(
           dotColor: Colors.grey.shade400,
-          activeDotColor: Color(0xff22A45D),
+          activeDotColor: const Color(0xff22A45D),
           dotHeight: 8,
           dotWidth: 8,
         ),

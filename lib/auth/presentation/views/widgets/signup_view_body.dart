@@ -38,8 +38,8 @@ class _SignupViewBodyState extends State<SignupViewBody> {
             autovalidateMode: autovalidateMode,
             child: Column(
               children: [
-                SizedBox(height: 16.h),
-                Text('Create an account', style: TextStyles.montserrat700_36),
+                SizedBox(height: 32.h),
+                const Text('Create an account', style: TextStyles.montserrat700_36),
                 SizedBox(height: 24.h),
 
                 // Username field
@@ -101,7 +101,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                 ),
                 SizedBox(height: 16.h),
 
-                PublicOffireSection(),
+                const PublicOffireSection(),
                 SizedBox(height: 30.h),
 
                 CustomButton(

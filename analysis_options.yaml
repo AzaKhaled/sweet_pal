@@ -21,7 +21,13 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    # Performance optimization rules
+    avoid_print: true  # Disable print statements for better performance
+    prefer_const_constructors: true  # Use const constructors when possible
+    prefer_const_literals_to_create_immutables: true  # Use const for immutable collections
+    prefer_const_declarations: true  # Use const for variables that don't change
+    avoid_unnecessary_containers: true  # Avoid unnecessary Container widgets
+    prefer_single_quotes: true  # Use single quotes for consistency
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
 # Additional information about this file can be found at

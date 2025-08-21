@@ -10,28 +10,27 @@ class ProfileCubit extends Cubit<ProfileState> {
   final SupabaseAuthService authService;
   final StorageService storageService;
 
-  ProfileCubit(this.authService, this.storageService)
-      : super(ProfileInitial());
+  ProfileCubit(this.authService, this.storageService) : super(ProfileInitial());
 
-  Future<void> updateProfileImage(File image) async {
+  Future<void> uploadImage(File imageFile) async {
     emit(ProfileLoading());
-
     try {
-      final url = await storageService.uploadProfileImage(image);
-      await authService.updateProfileImage(url);
-      emit(ProfileSuccess("تم تحديث الصورة بنجاح"));
+      final imageUrl = await storageService.uploadProfileImage(imageFile);
+      await authService.updateProfileImage(imageUrl);
+      emit(ProfileSuccess('updated successfully!'));
     } catch (e) {
+      // print(e.toString());
       emit(ProfileError(e.toString()));
     }
   }
 
   Future<void> changePassword(String newPassword) async {
     emit(ProfileLoading());
-
     try {
       await authService.changePassword(newPassword);
-      emit(ProfileSuccess("تم تغيير كلمة المرور"));
+      emit(ProfileSuccess('Password changed successfully!'));
     } catch (e) {
+      // print(e.toString());
       emit(ProfileError(e.toString()));
     }
   }

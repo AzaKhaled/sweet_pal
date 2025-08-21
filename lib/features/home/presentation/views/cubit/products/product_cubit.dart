@@ -24,6 +24,33 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
+  Future<void> searchProducts(String query) async {
+    emit(ProductLoading());
+    try {
+      final response = await Supabase.instance.client
+          .from('products')
+          .select('*')
+          .or('name_en.ilike.%$query%,description_en.ilike.%$query%');
+
+      emit(ProductLoaded(List<Map<String, dynamic>>.from(response)));
+    } catch (e) {
+      emit(ProductError('Failed to search products'));
+    }
+  }
+
+  Future<void> fetchAllProducts() async {
+    emit(ProductLoading());
+    try {
+      final response = await Supabase.instance.client
+          .from('products')
+          .select('*');
+
+      emit(ProductLoaded(List<Map<String, dynamic>>.from(response)));
+    } catch (e) {
+      emit(ProductError('Failed to load all products'));
+    }
+  }
+
   void clearProducts() {
     emit(ProductInitial());
   }

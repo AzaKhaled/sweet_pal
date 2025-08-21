@@ -25,7 +25,7 @@ class SignUpViewBodyBlocConsumer extends StatelessWidget {
               );
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeView()),
+                MaterialPageRoute(builder: (context) => const HomeView()),
               );
             }
             if (state is SignupFailure) {
@@ -35,7 +35,7 @@ class SignUpViewBodyBlocConsumer extends StatelessWidget {
           builder: (context, state) {
             return ModalProgressHUD(
               inAsyncCall: state is SignupLoading ? true : false,
-              child: SignupViewBody(),
+              child: const SignupViewBody(),
             );
           },
         );

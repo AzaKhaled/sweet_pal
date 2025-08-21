@@ -6,6 +6,7 @@ import 'package:sweet_pal/auth/presentation/views/singup_view.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/have_an_account_section.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/or_divider.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
+import 'package:sweet_pal/auth/presentation/views/widgets/unified_password_reset.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
@@ -34,9 +35,9 @@ class _SigninViewBodyState extends State<SigninViewBody> {
             autovalidateMode: autovalidateMode,
             child: Column(
               children: [
-                SizedBox(height: 16.h),
+                SizedBox(height: 32.h),
 
-                Text('Welcome Back!', style: TextStyles.montserrat700_36),
+                const Text('Welcome Back!', style: TextStyles.montserrat700_36),
                 SizedBox(height: 24.h),
                 CustomTextFormField(
                   onSaved: (value) {
@@ -56,6 +57,26 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                 ),
 
                 SizedBox(height: 30.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResetPasswordView(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'forgot password?',
+                        style: TextStyles.montserrat400_12_red,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 35.h),
                 CustomButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
@@ -72,7 +93,7 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                 ),
                 SizedBox(height: 16.h),
                 const OrDivider(),
-                
+
                 SizedBox(height: 16.h),
                 HaveAnAccountSection(
                   leadingText: 'Create An Account ',
