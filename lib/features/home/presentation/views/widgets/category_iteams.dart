@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/category/category_cubit.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class CategoryGridSection extends StatelessWidget {
   final Function(String id, String name) onSelect;
@@ -78,6 +80,8 @@ class CategoryGridSection extends StatelessWidget {
                                 child: const Icon(Icons.error, size: 30),
                               );
                             },
+                            cacheWidth: 200, // Optimize image size
+                            cacheHeight: 200, // Optimize image size
                           ),
                           // طبقة التدرج
                           // خلفية سوداء شفافة تغطي الصورة بالكامل

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/products/product_cubit.dart';
 import 'package:sweet_pal/features/home/presentation/views/widgets/custom_search.dart';
@@ -100,9 +102,9 @@ class _HeaderSectionState extends State<HeaderSection> {
     return RepaintBoundary(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
@@ -141,8 +143,8 @@ class _HeaderSectionState extends State<HeaderSection> {
                         ),
                       ],
                     ),
-                    child: _isLoading
-                        ? const CircleAvatar(
+                child: _isLoading
+                        ? CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.white,
                             child: CircularProgressIndicator(
@@ -161,7 +163,7 @@ class _HeaderSectionState extends State<HeaderSection> {
           }
         : null,
     child: !isValidImageUrl(avatarUrl)
-        ? const Icon(Icons.person, color: Colors.grey)
+        ? Icon(Icons.person, color: Provider.of<ThemeProvider>(context).secondaryTextColor)
         : null,
   ),
 ),

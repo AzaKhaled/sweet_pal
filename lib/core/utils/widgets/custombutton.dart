@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, required this.onPressed, required this.text});
@@ -21,7 +23,9 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyles.montserrat600_20_white.copyWith(color: Colors.white),
+          style: TextStyles.montserrat600_20_white.copyWith(
+            color: Provider.of<ThemeProvider>(context, listen: false).textColor,
+          ),
         ),
       ),
     );

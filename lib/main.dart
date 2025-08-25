@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/core/services/deep_link_handler.dart';
 import 'package:sweet_pal/core/services/serv_locator.dart';
@@ -16,8 +17,12 @@ import 'package:sweet_pal/features/onboarding/presentation/views/onboarding_view
 import 'package:sweet_pal/features/orders/cubit/order_cubit.dart';
 import 'package:sweet_pal/features/orders/services/order_service.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_history_view.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 //azakhaled813@gmail.com
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -51,6 +56,7 @@ void main() async {
     anonKey: AppConstants.Supabase_Key,
   );
   setupServiceLocator();
+  
   runApp(const Resturant());
 }
 
@@ -81,26 +87,23 @@ class Resturant extends StatelessWidget {
                 DeepLinkHandler.init(context);
               });
 
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Sweet Pal',
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  useMaterial3: true,
-                  pageTransitionsTheme: const PageTransitionsTheme(
-                    builders: {
-                      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                    },
-                  ),
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  splashFactory: InkRipple.splashFactory,
+              return ChangeNotifierProvider(
+                create: (context) => ThemeProvider(),
+                child: Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, child) {
+                    return MaterialApp(
+                      scaffoldMessengerKey: rootScaffoldMessengerKey,
+                      debugShowCheckedModeBanner: false,
+                      title: 'Sweet Pal',
+                      theme: themeProvider.currentTheme,
+                      initialRoute: '/',
+                      routes: {
+                        '/': (context) => const OnboardingView(),
+                        '/order-history': (context) => const OrderHistoryView(),
+                      },
+                    );
+                  },
                 ),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const OnboardingView(),
-                  '/order-history': (context) => const OrderHistoryView(),
-                },
               );
             },
           ),

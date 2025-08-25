@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/auth/presentation/cubits/signup/signup_cubit.dart';
 import 'package:sweet_pal/auth/presentation/views/sigin_view.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/have_an_account_section.dart';
@@ -11,6 +12,7 @@ import 'package:sweet_pal/auth/presentation/views/widgets/public_offer_section.d
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class SignupViewBody extends StatefulWidget {
   const SignupViewBody({super.key});
@@ -39,7 +41,12 @@ class _SignupViewBodyState extends State<SignupViewBody> {
             child: Column(
               children: [
                 SizedBox(height: 32.h),
-                const Text('Create an account', style: TextStyles.montserrat700_36),
+                Text(
+                  'Create an account',
+                  style: TextStyles.montserrat700_36.copyWith(
+                    color: Provider.of<ThemeProvider>(context).textColor,
+                  ),
+                ),
                 SizedBox(height: 24.h),
 
                 // Username field

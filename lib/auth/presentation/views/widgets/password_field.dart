@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
 
 class PasswordField extends StatefulWidget {
@@ -38,7 +40,7 @@ class _PasswordFieldState extends State<PasswordField> {
         },
         child: Icon(
           obscureText ? Icons.remove_red_eye : Icons.visibility_off,
-          color: const Color(0xffC9CECF),
+          color: Provider.of<ThemeProvider>(context).secondaryTextColor,
         ),
       ),
       hintText: widget.hintText,

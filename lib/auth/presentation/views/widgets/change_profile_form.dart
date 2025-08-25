@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/auth/presentation/cubits/profile/profile_cubit.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class ChangeProfileForm extends StatefulWidget {
   const ChangeProfileForm({super.key});
@@ -101,18 +103,21 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                   child: _image == null &&
                           (_currentAvatarUrl == null ||
                               _currentAvatarUrl!.isEmpty)
-                      ? const Icon(
+                      ? Icon(
                           Icons.camera_alt,
                           size: 40,
-                          color: Colors.grey,
+                          color: Provider.of<ThemeProvider>(context).secondaryTextColor,
                         )
                       : null,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Change image',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 14, 
+                  color: Provider.of<ThemeProvider>(context).secondaryTextColor,
+                ),
               ),
               const SizedBox(height: 20),
               if (_image != null)
@@ -129,7 +134,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                     label: Text(_isUploading ? 'Uploading...' : 'Upload Image'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
-                      foregroundColor: Colors.white,
+                      foregroundColor: Provider.of<ThemeProvider>(context).textColor,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -141,7 +146,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Provider.of<ThemeProvider>(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -156,11 +161,12 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Change Password',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Provider.of<ThemeProvider>(context).textColor,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -246,7 +252,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor,
-                            foregroundColor: Colors.white,
+                            foregroundColor: Provider.of<ThemeProvider>(context).textColor,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),

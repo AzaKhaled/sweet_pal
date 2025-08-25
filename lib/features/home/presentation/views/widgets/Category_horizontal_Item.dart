@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/category/category_cubit.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 
 class CategoryHorizontalList extends StatelessWidget {
@@ -36,7 +38,7 @@ class CategoryHorizontalList extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: category['id'] == selectedId
                           ? AppColors.primaryColor
-                          : Colors.white,
+                          : Provider.of<ThemeProvider>(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -48,6 +50,8 @@ class CategoryHorizontalList extends StatelessWidget {
                             height: 40,
                             width: 60,
                             fit: BoxFit.cover,
+                            cacheWidth: 60, // Optimize image size
+                            cacheHeight: 40, // Optimize image size
                           ),
                         ),
 
@@ -57,10 +61,11 @@ class CategoryHorizontalList extends StatelessWidget {
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
                             height: 1.3,
+                            color: Provider.of<ThemeProvider>(context).textColor,
                           ),
                         ),
                       ],

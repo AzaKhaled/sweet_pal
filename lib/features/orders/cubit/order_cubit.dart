@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../services/order_service.dart';
 import '../models/order_model.dart';
@@ -78,17 +79,55 @@ class OrderCubit extends Cubit<OrderState> {
     emit(state.copyWith(isLoading: true, error: null));
     
     try {
+      debugPrint('Updating order $orderId status to: $status');
+      
+      // Update in database
       await _orderService.updateOrderStatus(orderId, status);
+      
+      // Update local state
       final updatedOrders = state.orders.map((order) {
         if (order.id == orderId) {
+          debugPrint('Order $orderId status updated locally to: $status');
           return order.copyWith(status: status);
         }
         return order;
       }).toList();
       
       emit(state.copyWith(orders: updatedOrders, isLoading: false));
+      
+      // Log success
+      debugPrint('Order status updated successfully for order: $orderId');
+      
     } catch (e) {
-      emit(state.copyWith(error: e.toString(), isLoading: false));
+      debugPrint('Error updating order status: $e');
+      emit(state.copyWith(error: 'Failed to update order status: ${e.toString()}', isLoading: false));
+      rethrow;
+    }
+  }
+
+  Future<void> refreshOrder(String orderId) async {
+    try {
+      debugPrint('Refreshing order: $orderId');
+      
+      // Get the latest order data from the server
+      final orderData = await _orderService.getOrder(orderId);
+      final updatedOrder = OrderModel.fromJson(orderData);
+      
+      // Update the order in the local state
+      final updatedOrders = state.orders.map((order) {
+        if (order.id == orderId) {
+          return updatedOrder;
+        }
+        return order;
+      }).toList();
+      
+      emit(state.copyWith(orders: updatedOrders));
+      
+      debugPrint('Order refreshed successfully: $orderId');
+      
+    } catch (e) {
+      debugPrint('Error refreshing order: $e');
+      // Don't emit error state for refresh, just log it
     }
   }
 }

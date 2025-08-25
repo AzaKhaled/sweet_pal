@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/auth/presentation/cubits/signin/signin_cubit.dart';
 import 'package:sweet_pal/auth/presentation/views/singup_view.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/have_an_account_section.dart';
@@ -10,6 +11,7 @@ import 'package:sweet_pal/auth/presentation/views/widgets/unified_password_reset
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class SigninViewBody extends StatefulWidget {
   const SigninViewBody({super.key});
@@ -37,7 +39,12 @@ class _SigninViewBodyState extends State<SigninViewBody> {
               children: [
                 SizedBox(height: 32.h),
 
-                const Text('Welcome Back!', style: TextStyles.montserrat700_36),
+                Text(
+                  'Welcome Back!',
+                  style: TextStyles.montserrat700_36.copyWith(
+                    color: Provider.of<ThemeProvider>(context).textColor,
+                  ),
+                ),
                 SizedBox(height: 24.h),
                 CustomTextFormField(
                   onSaved: (value) {

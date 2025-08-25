@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class PublicOffireSection extends StatelessWidget {
   const PublicOffireSection({super.key});
@@ -7,8 +9,8 @@ class PublicOffireSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RichText(
-      text: const TextSpan(
-        style: TextStyle(color: Colors.black),
+      text: TextSpan(
+        style: TextStyle(color: Provider.of<ThemeProvider>(context, listen: false).textColor),
         children: [
           TextSpan(text: 'By clicking the '),
           TextSpan(

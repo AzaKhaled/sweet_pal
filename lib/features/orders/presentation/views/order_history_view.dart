@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/features/orders/cubit/order_cubit.dart';
 import 'package:sweet_pal/features/orders/models/order_model.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_view.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class OrderHistoryView extends StatefulWidget {
   const OrderHistoryView({super.key});
@@ -36,7 +38,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Provider.of<ThemeProvider>(context).scaffoldBackgroundColor,
       appBar: _buildAppBar(context),
       body: _buildBody(),
       floatingActionButton: _buildFloatingActionButton(),
@@ -44,22 +46,24 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
-      backgroundColor: Colors.white,
-      title: const Text(
+      backgroundColor: themeProvider.scaffoldBackgroundColor,
+      title: Text(
         'My Orders',
         style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          color: AppColors.secondaryColor,
+          color: themeProvider.textColor,
         ),
       ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.refresh_rounded,
             color: AppColors.primaryColor,
           ),
@@ -281,9 +285,11 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.cardBackgroundColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -303,7 +309,7 @@ class OrderCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderHeader(),
+                _buildOrderHeader(context),
                 const SizedBox(height: 12),
                 _buildOrderDetails(),
                 const SizedBox(height: 12),
@@ -320,7 +326,9 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderHeader() {
+  Widget _buildOrderHeader(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return Row(
       children: [
         Expanded(
@@ -329,10 +337,10 @@ class OrderCard extends StatelessWidget {
             children: [
               Text(
                 'Order #${order.id.substring(0, 8).toUpperCase()}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.lightPrimaryColor,
+                  color: themeProvider.textColor,
                 ),
               ),
               const SizedBox(height: 4),
@@ -355,7 +363,7 @@ class OrderCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: statusColor.withOpacity(0.1),
-        border: Border.all(color: statusColor.withOpacity(0.3)),
+        border: Border.all(color: statusColor.withOpacity(0.1)),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -484,7 +492,6 @@ class OrderCard extends StatelessWidget {
   }
 
   void _onOrderTap(BuildContext context) {
-    // TODO: Navigate to order details
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Order details for ${order.id.substring(0, 8)}')),
     );

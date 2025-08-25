@@ -12,7 +12,7 @@ class PerformanceOptimizations {
         // إزالة معظم debug prints لتحسين الأداء
         if (kDebugMode && message != null && message.contains('ERROR')) {
           // طباعة الأخطاء فقط
-          print(message);
+          // print(message);
         }
       };
     }

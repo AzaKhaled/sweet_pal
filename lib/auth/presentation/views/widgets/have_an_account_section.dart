@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class HaveAnAccountSection extends StatelessWidget {
   final String leadingText;
@@ -17,7 +19,9 @@ class HaveAnAccountSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       children: [
-        Text(leadingText, style: const TextStyle(color: Colors.black)),
+        Text(leadingText, style: TextStyle(
+          color: Provider.of<ThemeProvider>(context, listen: false).textColor,
+        )),
         GestureDetector(
           onTap: onTap,
           child: Text(

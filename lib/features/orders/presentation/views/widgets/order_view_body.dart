@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_cubit.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_state.dart';
 import 'package:sweet_pal/features/orders/cubit/order_cubit.dart';
@@ -17,30 +19,30 @@ class OrderViewBody extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.back, color: Colors.black),
+          icon: Icon(CupertinoIcons.back, color: Provider.of<ThemeProvider>(context, listen: false).textColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Orders',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: AppColors.primaryColor,
+            color: Provider.of<ThemeProvider>(context).textColor,
           ),
         ),
       ),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           if (state.items.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     CupertinoIcons.cart_badge_minus,
                     size: 100,
-                    color: AppColors.primaryColor,
+                    color: Provider.of<ThemeProvider>(context).textColor,
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -48,7 +50,7 @@ class OrderViewBody extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey,
+                      color: Provider.of<ThemeProvider>(context).secondaryTextColor,
                     ),
                   ),
                 ],
@@ -85,14 +87,15 @@ class OrderViewBody extends StatelessWidget {
                                 children: [
                                   Text(
                                     item.productName,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
+                                      color: Provider.of<ThemeProvider>(context).textColor,
                                     ),
                                   ),
                                   Text(
                                     '\$${item.price}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.green,
                                     ),
@@ -113,7 +116,10 @@ class OrderViewBody extends StatelessWidget {
                                 ),
                                 Text(
                                   item.quantity.toString(),
-                                  style: const TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Provider.of<ThemeProvider>(context).textColor,
+                                  ),
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.add),
@@ -150,17 +156,18 @@ class OrderViewBody extends StatelessWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
+                        children: [
+                        Text(
                           'Total:',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            color: Provider.of<ThemeProvider>(context).textColor,
                           ),
                         ),
                         Text(
                           '\$${state.totalAmount.toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sweet_pal/auth/presentation/views/change_profile_view.dart';
 import 'package:sweet_pal/core/utils/app_performance.dart';
-
 import 'package:sweet_pal/features/home/presentation/views/widgets/home_view_body.dart';
+import 'package:sweet_pal/features/map/presentation/views/widgets/map_view.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_history_view.dart';
+import 'package:sweet_pal/features/setting/setting_view.dart';
 
 class HomeView extends StatefulWidget {
   final int initialTab;
@@ -19,7 +19,8 @@ class _HomeViewState extends State<HomeView> {
   static const List<Widget> _screens = [
     HomeViewBody(),
     OrderHistoryView(),
-    ChangeProfileView(),
+    MapScreen(),
+    SettingView(),
   ];
 
   @override
@@ -49,10 +50,8 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(Icons.shopping_bag),
               label: 'Order',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
           ],
         ),
       ),

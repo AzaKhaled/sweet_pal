@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/products/product_cubit.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_cubit.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class ProductListSection extends StatelessWidget {
   const ProductListSection({super.key});
@@ -26,13 +28,15 @@ class ProductListSection extends StatelessWidget {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
+                final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+                
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[100],
+                      color: themeProvider.cardBackgroundColor,
                     ),
                     child: Row(
                       children: [
@@ -48,7 +52,7 @@ class ProductListSection extends StatelessWidget {
                               return Container(
                                 width: 100,
                                 height: 100,
-                                color: Colors.grey[300],
+                                color: themeProvider.secondaryTextColor.withOpacity(0.3),
                                 child: const Center(
                                   child: CircularProgressIndicator(
                                     color: AppColors.primaryColor,
@@ -60,8 +64,8 @@ class ProductListSection extends StatelessWidget {
                               return Container(
                                 width: 100,
                                 height: 100,
-                                color: Colors.grey[300],
-                                child: const Icon(Icons.error),
+                                color: themeProvider.secondaryTextColor.withOpacity(0.3),
+                                child: Icon(Icons.error, color: themeProvider.textColor),
                               );
                             },
                           ),
@@ -73,9 +77,10 @@ class ProductListSection extends StatelessWidget {
                             children: [
                               Text(
                                 product['name_en'],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  color: themeProvider.textColor,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -83,7 +88,7 @@ class ProductListSection extends StatelessWidget {
                                 product['description_en'] ?? '',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[600],
+                                  color: themeProvider.secondaryTextColor,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

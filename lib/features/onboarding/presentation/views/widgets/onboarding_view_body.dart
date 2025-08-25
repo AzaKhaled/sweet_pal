@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sweet_pal/auth/presentation/views/sigin_view.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/app_images.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
@@ -73,11 +75,16 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
                       Assets.Logo,
                       fit: BoxFit.contain,
                       // تحسين الأداء - تخزين مؤقت للصورة
-                      cacheColorFilter: true,
+                      // cacheColorFilter: true,
                     ),
                   ),
                   SizedBox(width: 8.w),
-                  const Text('TamangFoodService', style: TextStyles.montserrat800_24),
+                  Text(
+                    'TamangFoodService',
+                    style: TextStyles.montserrat800_24.copyWith(
+                      color: Provider.of<ThemeProvider>(context).textColor,
+                    ),
+                  ),
                 ],
               ),
             ),
