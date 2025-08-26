@@ -20,7 +20,7 @@ class LocationCubit extends Cubit<LocationState> {
       // تأكد من إن الـ GPS شغال
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        emit(const LocationError("GPS is disabled"));
+        emit(const LocationError('GPS is disabled'));
         return;
       }
 
@@ -29,13 +29,13 @@ class LocationCubit extends Cubit<LocationState> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          emit(const LocationError("permission denied"));
+          emit(const LocationError('permission denied'));
           return;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        emit(const LocationError("permission denied permanently"));
+        emit(const LocationError('permission denied permanently'));
         return;
       }
 
@@ -50,9 +50,9 @@ class LocationCubit extends Cubit<LocationState> {
       emit(LocationSaved(position.latitude, position.longitude));
     } catch (e) {
       if (e.toString().contains('User not authenticated')) {
-        emit(const LocationError("must log in first"));
+        emit(const LocationError('must log in first'));
       } else {
-        emit(LocationError("error tracing"));
+        emit(const LocationError('error tracing'));
       }
     }
   }

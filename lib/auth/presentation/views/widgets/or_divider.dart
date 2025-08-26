@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class OrDivider extends StatelessWidget {
   const OrDivider({super.key});
@@ -17,7 +18,7 @@ class OrDivider extends StatelessWidget {
           Expanded(child: Divider(color: themeProvider.textColor.withOpacity(0.3))),
           const SizedBox(width: 18),
           Text(
-            'OR Continue with',
+            LocalizationHelper.translate('OR Continue with', 'أو تابع مع'),
             textAlign: TextAlign.center,
             style: TextStyles.montserrat400_10_black.copyWith(
               color: themeProvider.textColor,

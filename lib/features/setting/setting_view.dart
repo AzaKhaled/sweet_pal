@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/auth/presentation/views/change_profile_view.dart';
+import 'package:sweet_pal/auth/presentation/views/sigin_view.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
+import 'package:sweet_pal/core/widgets/language_switch_tile.dart';
 
 class SettingView extends StatefulWidget {
   const SettingView({super.key});
@@ -17,14 +22,19 @@ class _SettingViewState extends State<SettingView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+         automaticallyImplyLeading: false,
+        title: Text(LocalizationHelper.settingsText,style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.secondaryColor,
+              ),),
         centerTitle: true,
       ),
       body: ListView(
         children: [
           ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('Change Profile'),
+            title: Text(LocalizationHelper.changeProfileText),
             onTap: () {
               Navigator.push(
                 context,
@@ -35,14 +45,27 @@ class _SettingViewState extends State<SettingView> {
             },
           ),
           SwitchListTile(
-            title: const Text('Dark Mode'),
+            title: Text(LocalizationHelper.darkModeText),
             value: themeProvider.isDarkMode,
             onChanged: (value) {
               themeProvider.toggleTheme();
             },
             secondary: const Icon(Icons.dark_mode),
           ),
-          // يمكن إضافة المزيد من خيارات الإعدادات هنا لاحقاً
+          const Divider(),
+          const LanguageSwitchTile(), // Use the LanguageSwitchTile widget here
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: Text(LocalizationHelper.translate('Logout', 'تسجيل الخروج')),
+            onTap: () async {
+              await Supabase.instance.client.auth.signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const SiginView()),
+              );
+            },
+          ),
         ],
       ),
     );

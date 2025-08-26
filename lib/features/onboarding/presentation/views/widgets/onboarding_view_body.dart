@@ -6,6 +6,7 @@ import 'package:sweet_pal/auth/presentation/views/sigin_view.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/app_images.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/features/onboarding/presentation/views/widgets/SmoothPageindicators.dart';
 import 'package:sweet_pal/features/onboarding/presentation/views/widgets/onboarding_view_items.dart';
@@ -22,32 +23,42 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
   final int _totalPages = 4;
 
   // تحسين الأداء - تخزين البيانات
-  static const List<Map<String, String>> _onboardingData = [
-    {
-      'imagePath': Assets.imagesIllustration,
-      'title': 'Welcome',
-      'subtitle':
+  List<Map<String, String>> get _onboardingData {
+    return [
+      {
+        'imagePath': Assets.imagesIllustration,
+        'title': LocalizationHelper.welcomeText,
+        'subtitle': LocalizationHelper.translate(
           'It\'s a pleasure to meet you. We are excited that you\'re here so let\'s get started!',
-    },
-    {
-      'imagePath': Assets.imagesIllustration1,
-      'title': 'All your favorites',
-      'subtitle':
-          'order from the best local restaurants with easy,on-demand delivery',
-    },
-    {
-      'imagePath': Assets.imagesIllustrations,
-      'title': 'Free delivery offers',
-      'subtitle':
-          'free deliver for new customers via paypal pay and other payment methods',
-    },
-    {
-      'imagePath': Assets.imagesIllustrations1,
-      'title': 'Choose your food',
-      'subtitle':
-          'Easily find your type of food craving and you\'ll get delivery in wide range.',
-    },
-  ];
+          'سعداء بلقائك. نحن متحمسون لوجودك هنا، فلنبدأ!',
+        ),
+      },
+      {
+        'imagePath': Assets.imagesIllustration1,
+        'title': LocalizationHelper.allYourFavoritesText,
+        'subtitle': LocalizationHelper.translate(
+          'Order from the best local restaurants with easy, on-demand delivery',
+          'اطلب من أفضل المطاعم المحلية مع توصيل سهل عند الطلب',
+        ),
+      },
+      {
+        'imagePath': Assets.imagesIllustrations,
+        'title': LocalizationHelper.freeDeliveryOffersText,
+        'subtitle': LocalizationHelper.translate(
+          'Free delivery for new customers via PayPal and other payment methods',
+          'توصيل مجاني للعملاء الجدد عبر PayPal وطرق الدفع الأخرى',
+        ),
+      },
+      {
+        'imagePath': Assets.imagesIllustrations1,
+        'title': LocalizationHelper.chooseYourFoodText,
+        'subtitle': LocalizationHelper.translate(
+          'Easily find your type of food craving and you\'ll get delivery in wide range',
+          'ابحث بسهولة عن نوع الطعام الذي تشتهيه وسنقوم بالتوصيل في نطاق واسع',
+        ),
+      },
+    ];
+  }
 
   @override
   void dispose() {
@@ -131,7 +142,7 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
                   MaterialPageRoute(builder: (context) => const SiginView()),
                 );
               },
-              text: 'Get Started',
+              text: LocalizationHelper.getStartedText,
             ),
           ),
         ],

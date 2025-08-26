@@ -6,6 +6,7 @@ import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/customtextfiled.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class ResetPasswordView extends StatefulWidget {
   const ResetPasswordView({super.key});
@@ -45,7 +46,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               SizedBox(height: 80.h),
               Center(
                 child: Text(
-                  _isResetMode ? 'Reset Password' : 'Forget Password',
+                  _isResetMode ? LocalizationHelper.changePasswordText : LocalizationHelper.forgotPasswordText,
                   style: TextStyles.montserrat700_36.copyWith(fontSize: 28.sp),
                 ),
               ),
@@ -59,15 +60,15 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return LocalizationHelper.pleaseEnterEmailText;
                     }
                     if (!value.contains('@')) {
-                      return 'Enter a valid email address';
+                      return LocalizationHelper.invalidEmailText;
                     }
                     return null;
                   },
                   preffixIcon: const Icon(Icons.email_rounded),
-                  hintText: 'Email',
+                  hintText: LocalizationHelper.emailText,
                   textInputType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 16.h),
@@ -77,9 +78,12 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                   children: [
                     const Text('*', style: TextStyles.montserrat400_12_red),
                     SizedBox(width: 4.w),
-                    const Flexible(
+                    Flexible(
                       child: Text(
-                        'We will send you a message to reset your password',
+                        LocalizationHelper.translate(
+                          'We will send you a message to reset your password',
+                          'سنرسل لك رسالة لإعادة تعيين كلمة المرور'
+                        ),
                         softWrap: true,
                       ),
                     ),
@@ -87,7 +91,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                 ),
                 SizedBox(height: 30.h),
                 CustomButton(
-                  text: 'Send Reset Email',
+                  text: LocalizationHelper.translate('Send Reset Email', 'إرسال بريد إعادة التعيين'),
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       formKey.currentState!.save();
@@ -98,8 +102,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           redirectTo: 'myapp://reset-password?type=recovery',
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Password reset email sent. Check your inbox.'),
+                          SnackBar(
+                            content: Text(LocalizationHelper.passwordResetEmailSentText),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -115,8 +119,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         );
                       } catch (_) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('An unexpected error occurred'),
+                          SnackBar(
+                            content: Text(LocalizationHelper.unexpectedErrorText),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -134,13 +138,13 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               else ...[
                 PasswordField(
                   controller: passwordController,
-                  hintText: 'New Password',
+                  hintText: LocalizationHelper.translate('New Password', 'كلمة المرور الجديدة'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter new password';
+                      return LocalizationHelper.translate('Enter new password', 'يرجى إدخال كلمة المرور الجديدة');
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return LocalizationHelper.translate('Password must be at least 6 characters', 'يجب أن تكون كلمة المرور 6 أحرف على الأقل');
                     }
                     return null;
                   },
@@ -148,17 +152,17 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                 SizedBox(height: 16.h),
                 PasswordField(
                   controller: confirmPasswordController,
-                  hintText: 'Confirm Password',
+                  hintText: LocalizationHelper.confirmPasswordText,
                   validator: (value) {
                     if (value != passwordController.text) {
-                      return 'Passwords do not match';
+                      return LocalizationHelper.passwordsDoNotMatchText;
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 30.h),
                 CustomButton(
-                  text: 'Update Password',
+                  text: LocalizationHelper.changePasswordText,
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       try {
@@ -166,8 +170,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           UserAttributes(password: passwordController.text),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Password updated successfully!'),
+                          SnackBar(
+                            content: Text(LocalizationHelper.passwordUpdatedText),
                             backgroundColor: Colors.green,
                           ),
                         );

@@ -8,6 +8,7 @@ import 'package:sweet_pal/auth/presentation/cubits/profile/profile_cubit.dart';
 import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class ChangeProfileForm extends StatefulWidget {
   const ChangeProfileForm({super.key});
@@ -113,7 +114,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Change image',
+                LocalizationHelper.translate('Change image', 'تغيير الصورة'),
                 style: TextStyle(
                   fontSize: 14, 
                   color: Provider.of<ThemeProvider>(context).secondaryTextColor,
@@ -131,7 +132,9 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                             await cubit.uploadImage(_image!);
                             setState(() => _isUploading = false);
                           },
-                    label: Text(_isUploading ? 'Uploading...' : 'Upload Image'),
+                    label: Text(_isUploading 
+                      ? LocalizationHelper.translate('Uploading...', 'جاري التحميل...') 
+                      : LocalizationHelper.translate('Upload Image', 'تحميل الصورة')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
                       foregroundColor: Provider.of<ThemeProvider>(context).textColor,
@@ -162,7 +165,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Change Password',
+                        LocalizationHelper.changePasswordText,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -174,10 +177,10 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                       // Current Password
                       PasswordField(
                         controller: _currentPasswordController,
-                        hintText: 'Current Password',
+                        hintText: LocalizationHelper.translate('Current Password', 'كلمة المرور الحالية'),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your current password';
+                            return LocalizationHelper.translate('Please enter your current password', 'يرجى إدخال كلمة المرور الحالية');
                           }
                           return null;
                         },
@@ -187,10 +190,10 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                       // New Password
                       PasswordField(
                         controller: _newPasswordController,
-                        hintText: 'New Password',
+                        hintText: LocalizationHelper.translate('New Password', 'كلمة المرور الجديدة'),
                         validator: (value) {
                           if (value == null || value.length < 6) {
-                            return 'Password must be at least 6 characters';
+                            return LocalizationHelper.translate('Password must be at least 6 characters', 'يجب أن تكون كلمة المرور 6 أحرف على الأقل');
                           }
                           return null;
                         },
@@ -200,10 +203,10 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                       // Confirm Password
                       PasswordField(
                         controller: _confirmPasswordController,
-                        hintText: 'Confirm Password',
+                        hintText: LocalizationHelper.confirmPasswordText,
                         validator: (value) {
                           if (value != _newPasswordController.text) {
-                            return 'Passwords do not match';
+                            return LocalizationHelper.passwordsDoNotMatchText;
                           }
                           return null;
                         },
@@ -258,7 +261,7 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text('Change password'),
+                          child: Text(LocalizationHelper.changePasswordText),
                         ),
                       ),
                     ],

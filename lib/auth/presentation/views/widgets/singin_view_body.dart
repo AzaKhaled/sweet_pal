@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/auth/presentation/cubits/signin/signin_cubit.dart';
@@ -12,6 +11,7 @@ import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class SigninViewBody extends StatefulWidget {
   const SigninViewBody({super.key});
@@ -40,7 +40,7 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                 SizedBox(height: 32.h),
 
                 Text(
-                  'Welcome Back!',
+                  LocalizationHelper.welcomeBackText,
                   style: TextStyles.montserrat700_36.copyWith(
                     color: Provider.of<ThemeProvider>(context).textColor,
                   ),
@@ -51,13 +51,13 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                     email = value!;
                   },
                   preffixIcon: const Icon(Icons.person_rounded),
-                  hintText: 'Username or Email',
+                  hintText: LocalizationHelper.usernameOrEmailText,
                   textInputType: TextInputType.name,
                 ),
 
                 SizedBox(height: 16.h),
                 PasswordField(
-                  hintText: 'Password',
+                  hintText: LocalizationHelper.passwordText,
                   onSaved: (value) {
                     password = value!;
                   },
@@ -76,8 +76,8 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                           ),
                         );
                       },
-                      child: const Text(
-                        'forgot password?',
+                      child: Text(
+                        LocalizationHelper.forgotPasswordText,
                         style: TextStyles.montserrat400_12_red,
                       ),
                     ),
@@ -96,14 +96,14 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                     }
                   },
 
-                  text: 'Login',
+                  text: LocalizationHelper.loginText,
                 ),
                 SizedBox(height: 16.h),
                 const OrDivider(),
 
                 SizedBox(height: 16.h),
                 HaveAnAccountSection(
-                  leadingText: 'Create An Account ',
+                  leadingText: LocalizationHelper.alreadyHaveAccountText,
                   actionText: 'Sign Up',
                   onTap: () {
                     Navigator.push(

@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/auth/presentation/cubits/signup/signup_cubit.dart';
@@ -13,6 +12,7 @@ import 'package:sweet_pal/core/utils/app_text_styles.dart';
 import 'package:sweet_pal/core/utils/widgets/custombutton.dart';
 import 'package:sweet_pal/core/utils/widgets/customtextfiled.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class SignupViewBody extends StatefulWidget {
   const SignupViewBody({super.key});
@@ -42,7 +42,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
               children: [
                 SizedBox(height: 32.h),
                 Text(
-                  'Create an account',
+                  LocalizationHelper.createAccountText,
                   style: TextStyles.montserrat700_36.copyWith(
                     color: Provider.of<ThemeProvider>(context).textColor,
                   ),
@@ -55,11 +55,11 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                     userName = value!;
                   },
                   preffixIcon: const Icon(Icons.person),
-                  hintText: 'Username',
+                  hintText: LocalizationHelper.usernameText,
                   textInputType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your username';
+                      return LocalizationHelper.pleaseEnterUsernameText;
                     }
                     return null;
                   },
@@ -72,23 +72,23 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                     email = value!;
                   },
                   preffixIcon: const Icon(Icons.email),
-                  hintText: 'Email',
+                  hintText: LocalizationHelper.emailText,
                   textInputType: TextInputType.emailAddress,
                   validator: (value) {
-  if (value == null || value.isEmpty) {
-    return 'Please enter your email';
-  } else if (!EmailValidator.validate(value)) {
-    return 'Invalid email address';
-  }
-  return null;
-}
-),
+                    if (value == null || value.isEmpty) {
+                      return LocalizationHelper.pleaseEnterEmailText;
+                    } else if (!EmailValidator.validate(value)) {
+                      return LocalizationHelper.invalidEmailText;
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: 16.h),
 
                 // Password
                 PasswordField(
                   controller: passwordController,
-                  hintText: 'Password',
+                  hintText: LocalizationHelper.passwordText,
                   onSaved: (value) => password = value!,
                 ),
                 SizedBox(height: 16.h),
@@ -96,12 +96,12 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                 // Confirm Password
                 PasswordField(
                   controller: confirmPasswordController,
-                  hintText: 'Confirm Password',
+                  hintText: LocalizationHelper.confirmPasswordText,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
+                      return LocalizationHelper.pleaseConfirmPasswordText;
                     } else if (value != passwordController.text) {
-                      return 'Passwords do not match';
+                      return LocalizationHelper.passwordsDoNotMatchText;
                     }
                     return null;
                   },
@@ -124,7 +124,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                       });
                     }
                   },
-                  text: 'Create Account',
+                  text: LocalizationHelper.createAccountButtonText,
                 ),
                 SizedBox(height: 16.h),
 
@@ -132,7 +132,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                 SizedBox(height: 16.h),
 
                 HaveAnAccountSection(
-                  leadingText: 'I Already Have an Account ',
+                  leadingText: LocalizationHelper.alreadyHaveAccountText,
                   actionText: 'Login',
                   onTap: () {
                     Navigator.push(

@@ -1,13 +1,28 @@
 class Category {
   final int id;
-  final String name;
+  final String nameEn;
+  final String nameAr;
   final String imageUrl;
 
-  Category({required this.id, required this.name, required this.imageUrl});
+  Category({
+    required this.id,
+    required this.nameEn,
+    required this.nameAr,
+    required this.imageUrl,
+  });
+  
+  String getLocalizedName(String locale) {
+    if (locale.startsWith('ar')) {
+      return nameAr.isNotEmpty ? nameAr : nameEn;
+    } else {
+      return nameEn;
+    }
+  }
   
   factory Category.fromMap(Map<String, dynamic> map) => Category(
     id: map['id'] as int,
-    name: map['name_en'] as String,
+    nameEn: map['name_en'] as String,
+    nameAr: map['name_ar'] as String,
     imageUrl: map['image_url'] as String,
   );
 }

@@ -5,6 +5,7 @@ import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/products/product_cubit.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_cubit.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class ProductListSection extends StatelessWidget {
   const ProductListSection({super.key});
@@ -76,7 +77,7 @@ class ProductListSection extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product['name_en'],
+                                LocalizationHelper.getLocalizedProductName(product),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -85,7 +86,7 @@ class ProductListSection extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                product['description_en'] ?? '',
+                                LocalizationHelper.getLocalizedProductDescription(product),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: themeProvider.secondaryTextColor,
@@ -113,7 +114,7 @@ class ProductListSection extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 backgroundColor: Colors.green,
-                                content: Center(child: Text('${product['name_en']} added to cart')),
+                                content: Center(child: Text('${LocalizationHelper.getLocalizedProductName(product)} added to cart')),
                                 duration: const Duration(seconds: 1),
                               ),
                             );
@@ -129,7 +130,7 @@ class ProductListSection extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          child: const Text('Add to Cart'),
+                          child: Text(LocalizationHelper.addToCartText),
                         ),
                       ],
                     ),

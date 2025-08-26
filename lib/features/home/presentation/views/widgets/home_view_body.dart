@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/products/product_cubit.dart';
 import 'package:sweet_pal/features/home/presentation/views/widgets/Category_horizontal_Item.dart';

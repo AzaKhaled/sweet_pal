@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/utils/app_text_styles.dart';
+import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
@@ -27,6 +30,8 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
@@ -41,26 +46,30 @@ class CustomTextFormField extends StatelessWidget {
             return null;
           },
       keyboardType: textInputType,
+      style: TextStyle(color: themeProvider.textColor),
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         prefixIcon: preffixIcon,
         hintStyle: TextStyles.montserrat500_12_grey.copyWith(
-          color: const Color(0xFF949D9E),
+          color: themeProvider.secondaryTextColor,
         ),
         hintText: hintText,
         filled: true,
-        fillColor: const Color(0xFFF9FAFA),
-        border: buildBorder(),
-        enabledBorder: buildBorder(),
-        focusedBorder: buildBorder(),
+        fillColor: themeProvider.cardBackgroundColor,
+        border: buildBorder(themeProvider),
+        enabledBorder: buildBorder(themeProvider),
+        focusedBorder: buildBorder(themeProvider, isFocused: true),
       ),
     );
   }
 
-  OutlineInputBorder buildBorder() {
+  OutlineInputBorder buildBorder(ThemeProvider themeProvider, {bool isFocused = false}) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(24),
-      borderSide: const BorderSide(width: 1, color: Color(0xFFE6E9E9)),
+      borderSide: BorderSide(
+        width: 1, 
+        color: isFocused ? AppColors.primaryColor : themeProvider.secondaryTextColor.withOpacity(0.3),
+      ),
     );
   }
 }

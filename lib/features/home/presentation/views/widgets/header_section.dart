@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/products/product_cubit.dart';
 import 'package:sweet_pal/features/home/presentation/views/widgets/custom_search.dart';
 
@@ -102,9 +102,9 @@ class _HeaderSectionState extends State<HeaderSection> {
     return RepaintBoundary(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(24),
             bottomRight: Radius.circular(24),
           ),
@@ -118,14 +118,15 @@ class _HeaderSectionState extends State<HeaderSection> {
               children: [
                 Expanded(
                   child: Text(
-                    name != null ? 'Welcome $name' : 'Welcome',
-                    style: const TextStyle(
+                    name != null ? '${LocalizationHelper.welcomeText} $name' : LocalizationHelper.welcomeText,
+                    style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white,
+                      color: Provider.of<ThemeProvider>(context).textColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () {
                     fetchUserData();
@@ -144,7 +145,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                       ],
                     ),
                 child: _isLoading
-                        ? CircleAvatar(
+                        ? const CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.white,
                             child: CircularProgressIndicator(

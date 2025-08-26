@@ -6,6 +6,7 @@ import 'package:sweet_pal/features/orders/models/order_model.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_view.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class OrderHistoryView extends StatefulWidget {
   const OrderHistoryView({super.key});
@@ -52,30 +53,30 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
       automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: themeProvider.scaffoldBackgroundColor,
-      title: Text(
-        'My Orders',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: themeProvider.textColor,
-        ),
-      ),
+          title: Text(
+            LocalizationHelper.translate('My Orders', 'طلباتي'),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: themeProvider.textColor,
+            ),
+          ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.refresh_rounded,
             color: AppColors.primaryColor,
           ),
-          tooltip: 'Refresh Orders',
+          tooltip: LocalizationHelper.refreshOrdersText,
           onPressed: _loadOrders,
         ),
       ],
       bottom: TabBar(
         controller: _tabController,
-        tabs: const [
-          Tab(text: 'Current'),
-          Tab(text: 'History'),
+        tabs: [
+          Tab(text: LocalizationHelper.currentText),
+          Tab(text: LocalizationHelper.historyText),
         ],
         labelColor: AppColors.primaryColor,
         unselectedLabelColor: Colors.grey,
@@ -120,9 +121,9 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
         children: [
           const Icon(Icons.error_outline_rounded, size: 64, color: Colors.red),
           const SizedBox(height: 16),
-          const Text(
-            'Oops! Something went wrong',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          Text(
+            LocalizationHelper.oopsText,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           Text(
@@ -134,7 +135,7 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
           ElevatedButton.icon(
             onPressed: _loadOrders,
             icon: const Icon(Icons.refresh_rounded),
-            label: const Text('Try Again'),
+            label: Text(LocalizationHelper.tryAgainText),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
@@ -152,20 +153,20 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
         children: [
           Icon(Icons.receipt_long_rounded, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 24),
-          const Text(
-            'No orders yet',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          Text(
+            LocalizationHelper.noOrdersYetText,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Start by creating your first order',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
+          Text(
+            LocalizationHelper.startCreatingOrderText,
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () => _navigateToOrderView(),
             icon: const Icon(Icons.add_shopping_cart_rounded),
-            label: const Text('Create Order'),
+            label: Text(LocalizationHelper.createOrderText),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
@@ -233,20 +234,20 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            isCurrent ? Icons.hourglass_empty_rounded : Icons.history_rounded,
-            size: 64,
-            color: Colors.grey[400],
+        Icon(
+          isCurrent ? Icons.hourglass_empty_rounded : Icons.history_rounded,
+          size: 64,
+          color: Colors.grey[400],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          isCurrent ? LocalizationHelper.noCurrentOrdersText : LocalizationHelper.noOrderHistoryText,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey,
           ),
-          const SizedBox(height: 16),
-          Text(
-            isCurrent ? 'No current orders' : 'No order history',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
-            ),
-          ),
+        ),
         ],
       ),
     );
@@ -256,10 +257,11 @@ class _OrderHistoryViewState extends State<OrderHistoryView>
     return FloatingActionButton.extended(
       onPressed: _navigateToOrderView,
       icon: const Icon(Icons.add_shopping_cart_rounded),
-      label: const Text('New Order'),
+      label: Text(LocalizationHelper.newOrderText),
       backgroundColor: AppColors.primaryColor,
       foregroundColor: Colors.white,
       elevation: 4,
+      heroTag: 'order_history_fab', // Unique hero tag
     );
   }
 
@@ -384,10 +386,10 @@ class OrderCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Total Amount',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-              ),
+                Text(
+                  LocalizationHelper.translate('Total Amount', 'المبلغ الإجمالي'),
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                ),
               Text(
                 '\$${order.totalAmount.toStringAsFixed(2)}',
                 style: const TextStyle(
@@ -422,9 +424,9 @@ class OrderCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Items',
-          style: TextStyle(
+        Text(
+          LocalizationHelper.itemsText,
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.redAccent,
@@ -461,10 +463,10 @@ class OrderCard extends StatelessWidget {
             ),
         if (order.items.length > 3) ...[
           const SizedBox(height: 4),
-          Text(
-            '+${order.items.length - 3} more items',
-            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-          ),
+            Text(
+              '+${order.items.length - 3} ${LocalizationHelper.moreItemsText}',
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            ),
         ],
       ],
     );
@@ -484,7 +486,7 @@ class OrderCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Cancel'),
+            child: Text(LocalizationHelper.cancelText),
           ),
         ),
       ],
@@ -493,7 +495,14 @@ class OrderCard extends StatelessWidget {
 
   void _onOrderTap(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Order details for ${order.id.substring(0, 8)}')),
+      SnackBar(
+        content: Text(
+          LocalizationHelper.translate(
+            'Order details for ${order.id.substring(0, 8)}',
+            'تفاصيل الطلب لـ ${order.id.substring(0, 8)}'
+          )
+        )
+      ),
     );
   }
 
@@ -501,12 +510,18 @@ class OrderCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cancel Order'),
-        content: const Text('Are you sure you want to cancel this order?'),
+        title: Text(LocalizationHelper.translate('Cancel Order', 'إلغاء الطلب')),
+        content: Text(LocalizationHelper.translate(
+          'Are you sure you want to cancel this order?',
+          'هل أنت متأكد أنك تريد إلغاء هذا الطلب؟'
+        )),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('No', style: TextStyle(color: Colors.black)),
+          child: Text(
+            LocalizationHelper.translate('No', 'لا'),
+            style: const TextStyle(color: Colors.black)
+          ),
           ),
           TextButton(
             onPressed: () {
@@ -517,10 +532,10 @@ class OrderCard extends StatelessWidget {
               Navigator.pop(context);
               onRefresh();
             },
-            child: const Text(
-              'Yes, Cancel',
-              style: TextStyle(color: Colors.red),
-            ),
+          child: Text(
+            LocalizationHelper.translate('Yes, Cancel', 'نعم، إلغاء'),
+            style: const TextStyle(color: Colors.red),
+          ),
           ),
         ],
       ),

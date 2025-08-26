@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_cubit.dart';
 import 'package:sweet_pal/features/orders/cubit/cart_state.dart';
 import 'package:sweet_pal/features/orders/cubit/order_cubit.dart';
 import 'package:sweet_pal/features/payment/views/widgets/payment_page.dart';
-
 import 'package:flutter/cupertino.dart';
 
 class OrderViewBody extends StatelessWidget {
@@ -24,7 +24,7 @@ class OrderViewBody extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Orders',
+          LocalizationHelper.ordersText,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -44,9 +44,9 @@ class OrderViewBody extends StatelessWidget {
                     size: 100,
                     color: Provider.of<ThemeProvider>(context).textColor,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    'Your cart is empty',
+                    LocalizationHelper.emptyCartText,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -95,7 +95,7 @@ class OrderViewBody extends StatelessWidget {
                                   ),
                                   Text(
                                     '\$${item.price}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.green,
                                     ),
@@ -156,9 +156,9 @@ class OrderViewBody extends StatelessWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                      children: [
                         Text(
-                          'Total:',
+                          LocalizationHelper.totalText,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -167,7 +167,7 @@ class OrderViewBody extends StatelessWidget {
                         ),
                         Text(
                           '\$${state.totalAmount.toStringAsFixed(2)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
@@ -212,7 +212,12 @@ class OrderViewBody extends StatelessWidget {
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Error creating order: $e'),
+                                content: Text(
+                                  LocalizationHelper.translate(
+                                    'Error creating order: $e',
+                                    'خطأ في إنشاء الطلب: $e'
+                                  ),
+                                ),
                               ),
                             );
                           }
@@ -225,9 +230,9 @@ class OrderViewBody extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          'Proceed to Checkout',
-                          style: TextStyle(fontSize: 18),
+                        child: Text(
+                          LocalizationHelper.proceedToCheckoutText,
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ),
                     ),

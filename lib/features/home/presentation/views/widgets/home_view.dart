@@ -4,6 +4,7 @@ import 'package:sweet_pal/features/home/presentation/views/widgets/home_view_bod
 import 'package:sweet_pal/features/map/presentation/views/widgets/map_view.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_history_view.dart';
 import 'package:sweet_pal/features/setting/setting_view.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class HomeView extends StatefulWidget {
   final int initialTab;
@@ -41,17 +42,26 @@ class _HomeViewState extends State<HomeView> {
               setState(() => _currentIndex = index);
             });
           },
-          selectedItemColor: Colors.black,
+          selectedItemColor: Colors.orange,
           unselectedItemColor: Colors.grey,
           type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag),
-              label: 'Order',
+              icon: const Icon(Icons.home), 
+              label: LocalizationHelper.translate('Home', 'الرئيسية'),
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.shopping_bag),
+              label: LocalizationHelper.translate('Orders', 'الطلبات'),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.map), 
+              label: LocalizationHelper.translate('Map', 'الخريطة'),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings), 
+              label: LocalizationHelper.translate('Settings', 'الإعدادات'),
+            ),
           ],
         ),
       ),

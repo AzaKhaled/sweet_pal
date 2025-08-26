@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/category/category_cubit.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
 
@@ -30,7 +31,7 @@ class CategoryHorizontalList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final category = categories[index];
                 return GestureDetector(
-                  onTap: () => onSelect(category['id'], category['name_en']),
+                  onTap: () => onSelect(category['id'], LocalizationHelper.getLocalizedCategoryName(category)),
                   child: Container(
                     width: 80,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -57,9 +58,8 @@ class CategoryHorizontalList extends StatelessWidget {
 
                         const SizedBox(height: 8),
                         Text(
-                          category['name_en'],
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
+                          LocalizationHelper.getLocalizedCategoryName(category),
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 11,
@@ -67,6 +67,7 @@ class CategoryHorizontalList extends StatelessWidget {
                             height: 1.3,
                             color: Provider.of<ThemeProvider>(context).textColor,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

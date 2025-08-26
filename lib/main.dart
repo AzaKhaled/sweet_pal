@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/core/services/deep_link_handler.dart';
 import 'package:sweet_pal/core/services/serv_locator.dart';
 import 'package:sweet_pal/core/services/supabase_auth_service.dart';
+import 'package:sweet_pal/core/services/localization_service.dart';
 import 'package:sweet_pal/core/utils/widgets/constat_keys.dart';
 import 'package:sweet_pal/core/utils/app_performance.dart';
 import 'package:sweet_pal/core/utils/performance_optimizations.dart';
@@ -57,11 +59,17 @@ void main() async {
   );
   setupServiceLocator();
   
-  runApp(const Resturant());
+  // Initialize localization service
+  final localizationService = LocalizationService();
+  await localizationService.init();
+  
+  runApp(Resturant(localizationService: localizationService));
 }
 
 class Resturant extends StatelessWidget {
-  const Resturant({super.key});
+  final LocalizationService localizationService;
+
+  const Resturant({super.key, required this.localizationService});
 
   @override
   Widget build(BuildContext context) {
@@ -87,15 +95,25 @@ class Resturant extends StatelessWidget {
                 DeepLinkHandler.init(context);
               });
 
-              return ChangeNotifierProvider(
-                create: (context) => ThemeProvider(),
-                child: Consumer<ThemeProvider>(
-                  builder: (context, themeProvider, child) {
+              return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider.value(value: localizationService),
+                  ChangeNotifierProvider(create: (context) => ThemeProvider()),
+                ],
+                child: Consumer2<LocalizationService, ThemeProvider>(
+                  builder: (context, localizationService, themeProvider, child) {
                     return MaterialApp(
                       scaffoldMessengerKey: rootScaffoldMessengerKey,
                       debugShowCheckedModeBanner: false,
                       title: 'Sweet Pal',
                       theme: themeProvider.currentTheme,
+                      locale: localizationService.currentLocale,
+                      supportedLocales: localizationService.supportedLocales,
+                      localizationsDelegates: const [
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                      ],
                       initialRoute: '/',
                       routes: {
                         '/': (context) => const OnboardingView(),

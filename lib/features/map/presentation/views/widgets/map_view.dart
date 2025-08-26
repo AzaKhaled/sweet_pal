@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sweet_pal/auth/presentation/views/sigin_view.dart';
 import 'package:sweet_pal/features/map/presentation/cubits/location_cubit.dart';
@@ -24,8 +25,8 @@ class MapScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: Center(
             child: Text(
-              "Map",
-              style: TextStyle(
+              LocalizationHelper.translate('Map', 'الخريطة'),
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: AppColors.secondaryColor,
@@ -39,16 +40,22 @@ class MapScreen extends StatelessWidget {
             children: [
               const Icon(Icons.location_off, size: 64, color: Colors.grey),
               const SizedBox(height: 16),
-              const Text(
-                "must log in first to access the map",
+              Text(
+                LocalizationHelper.translate(
+                  'must log in first to access the map',
+                  'يجب تسجيل الدخول أولاً للوصول إلى الخريطة'
+                ),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                "must log in to see your location on the map",
+              Text(
+                LocalizationHelper.translate(
+                  'must log in to see your location on the map',
+                  'يجب تسجيل الدخول لرؤية موقعك على الخريطة'
+                ),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -58,7 +65,7 @@ class MapScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const SiginView()),
                   );
                 },
-                child: const Text("Sign In"),
+                child: Text(LocalizationHelper.translate('Sign In', 'تسجيل الدخول')),
               ),
             ],
           ),
@@ -73,8 +80,8 @@ class MapScreen extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: Center(
             child: Text(
-              "Map",
-              style: TextStyle(
+              LocalizationHelper.translate('Map', 'الخريطة'),
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: AppColors.secondaryColor,
@@ -92,7 +99,14 @@ class MapScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.green,
-                  content: Center(child: Text("Location saved successfully")),
+                  content: Center(
+                    child: Text(
+                      LocalizationHelper.translate(
+                        'Location saved successfully',
+                        'تم حفظ الموقع بنجاح'
+                      )
+                    ),
+                  ),
                 ),
               );
             }
@@ -117,6 +131,7 @@ class MapScreen extends StatelessWidget {
               onPressed: () {
                 context.read<LocationCubit>().getAndSaveLocation();
               },
+              heroTag: 'map_fab', // Unique hero tag
             );
           },
         ),
@@ -126,8 +141,8 @@ class MapScreen extends StatelessWidget {
 
 Widget _buildInitialMap() {
   return FlutterMap(
-    options: MapOptions(
-      initialCenter: const LatLng(26.5595, 31.6957), 
+    options: const MapOptions(
+      initialCenter: LatLng(26.5595, 31.6957), 
       initialZoom: 10,
     ),
     children: [

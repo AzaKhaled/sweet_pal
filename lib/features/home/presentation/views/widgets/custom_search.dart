@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sweet_pal/core/utils/customtextfiled.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class CustomSearch extends StatelessWidget {
   final TextEditingController controller;
@@ -17,7 +18,7 @@ class CustomSearch extends StatelessWidget {
       controller: controller,
       onChanged: onChanged, 
       preffixIcon: const Icon(Icons.search),
-      hintText: 'Search any Product..',
+      hintText: LocalizationHelper.translate('Search any Product..', 'ابحث عن أي منتج..'),
       textInputType: TextInputType.text,
     );
   }

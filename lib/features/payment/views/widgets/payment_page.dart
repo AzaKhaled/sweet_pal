@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/widgets/constat_keys.dart';
 import 'package:sweet_pal/features/orders/cubit/order_cubit.dart';
 import 'package:sweet_pal/features/orders/presentation/views/order_history_view.dart';
 import 'package:sweet_pal/features/payment/services/paypal_service.dart';
 import 'package:sweet_pal/main.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 
 class PaymentPage extends StatefulWidget {
   final String orderId;
@@ -37,10 +38,10 @@ class _PaymentPageState extends State<PaymentPage> {
     
     return Scaffold(
       backgroundColor: themeProvider.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text(
-          'Payment',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          title: Text(
+            LocalizationHelper.paymentText,
+            style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
@@ -64,25 +65,25 @@ class _PaymentPageState extends State<PaymentPage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Column(
+            Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.payment,
                   size: 60,
                   color: AppColors.lightPrimaryColor,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  'Secure Payment',
-                  style: TextStyle(
+                  LocalizationHelper.securePaymentText,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
                   ),
                 ),
                 Text(
-                  'Complete your order safely',
-                  style: TextStyle(color: Colors.grey),
+                  LocalizationHelper.completeOrderSafelyText,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
@@ -98,10 +99,10 @@ class _PaymentPageState extends State<PaymentPage> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Order ID:',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                    children: [
+                        Text(
+                          LocalizationHelper.translate('Order ID:', 'رقم الطلب:'),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         Text(widget.orderId.substring(0, 8)),
                       ],
@@ -109,10 +110,10 @@ class _PaymentPageState extends State<PaymentPage> {
                     const Divider(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Total Amount:',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                    children: [
+                        Text(
+                          LocalizationHelper.translate('Total Amount:', 'المبلغ الإجمالي:'),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         Text(
                           '\$${widget.totalAmount.toStringAsFixed(2)}',
@@ -146,15 +147,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                     icon: const Icon(Icons.account_balance_wallet, size: 22),
                     onPressed: _processPayment,
-                    label: const Text(
-                      'Pay with PayPal',
-                      style: TextStyle(fontSize: 18),
+                    label: Text(
+                      LocalizationHelper.payWithPayPalText,
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ),
             const SizedBox(height: 20),
-            const Text(
-              'Your payment is secure and encrypted.',
-              style: TextStyle(color: Colors.grey),
+            Text(
+              LocalizationHelper.paymentSecureText,
+              style: const TextStyle(color: Colors.grey),
             ),
           ],
         ),
@@ -170,8 +171,8 @@ class _PaymentPageState extends State<PaymentPage> {
     final result = await PayPalService.launchPayPal(
       context: context,
       sandboxMode: true,
-      clientId: 'AQGkjslkSLYU6kwpn7e9mGNDFifraQCzhW9bzwfkGtSm7luQy9_NALKny09WCTdjq-oRCzPrFf6uNHth',
-      secretKey: 'EHLniUVg36YOaM0lzzfqLIjZhdwiCWnXkXV3oQbGOGyt-yZzy0LFrJ_QxTe2_-Dc2pal0cJltEpKdP_N',
+      clientId: AppConstants.clientId,
+      secretKey: AppConstants.secretKey,
       returnURL: 'https://sweetpal.com/payment/success',
       cancelURL: 'https://sweetpal.com/payment/cancel',
       transactions: [
@@ -216,24 +217,39 @@ class _PaymentPageState extends State<PaymentPage> {
           rootScaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,
-              content: Text('Payment Failed: ${result['error']}')),
+              content: Text(
+                LocalizationHelper.translate(
+                  'Payment Failed: ${result['error']}',
+                  'فشل الدفع: ${result['error']}'
+                )
+              )),
           );
           break;
         case 'cancelled':
           debugPrint('PayPal Payment Cancelled');
           rootScaffoldMessengerKey.currentState?.showSnackBar(
-            const SnackBar(
+            SnackBar(
               backgroundColor: Colors.red,
-              content: Text('Payment canceled!')),
+              content: Text(
+                LocalizationHelper.translate(
+                  'Payment canceled!',
+                  'تم إلغاء الدفع!'
+                )
+              )),
           );
           break;
         case 'completed':
           // Payment completed with minor UI issues
           debugPrint('PayPal Payment Completed with minor issues');
           rootScaffoldMessengerKey.currentState?.showSnackBar(
-            const SnackBar(
+            SnackBar(
               backgroundColor: Colors.green,
-              content: Text('Payment completed with minor issues.')),
+              content: Text(
+                LocalizationHelper.translate(
+                  'Payment completed with minor issues.',
+                  'تم الدفع مع وجود مشاكل بسيطة.'
+                )
+              )),
           );
           await _handlePaymentSuccess();
           break;
@@ -242,9 +258,14 @@ class _PaymentPageState extends State<PaymentPage> {
   // لو الشاشة اتقفلت تلقائي → نعتبر الدفع ناجح
   debugPrint('PayPal Payment auto-closed, treating as completed.');
   rootScaffoldMessengerKey.currentState?.showSnackBar(
-    const SnackBar(
+    SnackBar(
       backgroundColor: Colors.green,
-      content: Text('Payment completed successfully ✅')),
+      content: Text(
+        LocalizationHelper.translate(
+          'Payment completed successfully ✅',
+          'تم الدفع بنجاح ✅'
+        )
+      )),
   );
   await _handlePaymentSuccess();
 }
@@ -280,10 +301,15 @@ class _PaymentPageState extends State<PaymentPage> {
       
       // Show success message
       rootScaffoldMessengerKey.currentState?.showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.green,
-          content: Text('✅ Payment successful! Order completed.'),
-          duration: Duration(seconds: 3),
+          content: Text(
+            LocalizationHelper.translate(
+              '✅ Payment successful! Order completed.',
+              '✅ تم الدفع بنجاح! اكتمل الطلب.'
+            )
+          ),
+          duration: const Duration(seconds: 3),
         ),
       );
 
@@ -303,7 +329,12 @@ class _PaymentPageState extends State<PaymentPage> {
       rootScaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text('❌ Error: ${e.toString()}'),
+          content: Text(
+            LocalizationHelper.translate(
+              '❌ Error: ${e.toString()}',
+              '❌ خطأ: ${e.toString()}'
+            )
+          ),
           duration: const Duration(seconds: 4),
         ),
       );

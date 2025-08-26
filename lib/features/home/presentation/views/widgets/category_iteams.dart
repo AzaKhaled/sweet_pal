@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
+import 'package:sweet_pal/core/utils/localization_helper.dart';
 import 'package:sweet_pal/features/home/presentation/views/cubit/category/category_cubit.dart';
-import 'package:sweet_pal/core/providers/theme_provider.dart';
 
 class CategoryGridSection extends StatelessWidget {
   final Function(String id, String name) onSelect;
@@ -34,7 +33,7 @@ class CategoryGridSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 final category = categories[index];
                 return GestureDetector(
-                  onTap: () => onSelect(category['id'], category['name_en']),
+                  onTap: () => onSelect(category['id'], LocalizationHelper.getLocalizedCategoryName(category)),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -92,7 +91,7 @@ class CategoryGridSection extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             child: Center(
                               child: Text(
-                                category['name_en'],
+                                LocalizationHelper.getLocalizedCategoryName(category),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Colors.white,
@@ -117,7 +116,7 @@ class CategoryGridSection extends StatelessWidget {
               },
             );
           } else {
-            return const Center(child: Text('failed to load categories'));
+            return Center(child: Text(LocalizationHelper.failedToLoadCategoriesText));
           }
         },
       ),
