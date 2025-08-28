@@ -8,10 +8,14 @@ import 'package:sweet_pal/features/home/presentation/views/cubit/products/produc
 import 'package:sweet_pal/features/home/presentation/views/widgets/custom_search.dart';
 
 class HeaderSection extends StatefulWidget {
-  const HeaderSection({super.key});
+  final VoidCallback? onProfileImageChanged;
+
+  const HeaderSection({super.key, this.onProfileImageChanged});
 
   @override
   State<HeaderSection> createState() => _HeaderSectionState();
+
+  static final GlobalKey<_HeaderSectionState> headerKey = GlobalKey<_HeaderSectionState>();
 }
 
 class _HeaderSectionState extends State<HeaderSection> {
@@ -128,8 +132,9 @@ class _HeaderSectionState extends State<HeaderSection> {
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () {
-                    fetchUserData();
+                  onTap: () async {
+                    await fetchUserData();
+                    widget.onProfileImageChanged?.call();
                   },
                   child: Container(
                     decoration: BoxDecoration(

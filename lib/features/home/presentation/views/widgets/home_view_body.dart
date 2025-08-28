@@ -47,7 +47,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         body: Column(
           children: [
             // Header Section
-            const HeaderSection(),
+            HeaderSection(
+              key: HeaderSection.headerKey,
+              onProfileImageChanged: () {
+                // Call fetchUserData to refresh the avatar
+                final headerSectionState = HeaderSection.headerKey.currentState;
+                headerSectionState?.fetchUserData();
+              },
+            ),
 
             // باقي الجسم
             Expanded(

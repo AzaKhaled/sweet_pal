@@ -12,15 +12,23 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit(this.authService, this.storageService) : super(ProfileInitial());
 
-  Future<void> uploadImage(File imageFile) async {
+  Future<String> uploadImage(File imageFile) async {
     emit(ProfileLoading());
     try {
+      print('Starting image upload process...');
       final imageUrl = await storageService.uploadProfileImage(imageFile);
+      print('Image uploaded to storage. URL: $imageUrl');
+      
+      print('Updating database with new avatar URL...');
       await authService.updateProfileImage(imageUrl);
+      print('Database updated successfully');
+      
       emit(ProfileSuccess('updated successfully!'));
+      return imageUrl;
     } catch (e) {
-      // print(e.toString());
+      print('Error in uploadImage: $e');
       emit(ProfileError(e.toString()));
+      rethrow;
     }
   }
 

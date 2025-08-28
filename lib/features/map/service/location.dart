@@ -13,6 +13,6 @@ class LocationService {
     await supabase.from('users').update({
       'latitude': lat,
       'longitude': lng,
-    }).eq('id', user.id);
+    }).eq('auth_id', user.id);
   }
 }

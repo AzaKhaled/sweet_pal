@@ -9,6 +9,7 @@ import 'package:sweet_pal/auth/presentation/views/widgets/password_field.dart';
 import 'package:sweet_pal/core/utils/app_colors.dart';
 import 'package:sweet_pal/core/providers/theme_provider.dart';
 import 'package:sweet_pal/core/utils/localization_helper.dart';
+import 'package:sweet_pal/features/home/presentation/views/widgets/header_section.dart';
 
 class ChangeProfileForm extends StatefulWidget {
   const ChangeProfileForm({super.key});
@@ -129,7 +130,14 @@ class _ChangeProfileFormState extends State<ChangeProfileForm> {
                         ? null
                         : () async {
                             setState(() => _isUploading = true);
-                            await cubit.uploadImage(_image!);
+final imageUrl = await cubit.uploadImage(_image!);
+await _loadCurrentUserData();
+
+// Notify the HeaderSection to refresh the avatar
+WidgetsBinding.instance.addPostFrameCallback((_) {
+  final headerSectionState = HeaderSection.headerKey.currentState;
+  headerSectionState?.fetchUserData();
+});
                             setState(() => _isUploading = false);
                           },
                     label: Text(_isUploading 

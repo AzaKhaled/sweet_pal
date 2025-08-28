@@ -125,10 +125,16 @@ class SupabaseAuthService {
   }
 
   try {
-    await _client.from('users').update({
+    print('Updating user avatar_url in database for user: ${user.id}');
+    print('New avatar URL: $imageUrl');
+    
+    final result = await _client.from('users').update({
       'avatar_url': imageUrl,
     }).eq('auth_id', user.id);
+    
+    print('Database update result: $result');
   } catch (e) {
+    print('Error updating profile image in database: $e');
     throw CustomException(message: 'Failed to update profile image.');
   }
 }

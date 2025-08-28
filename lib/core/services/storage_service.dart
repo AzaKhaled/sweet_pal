@@ -10,17 +10,24 @@ class StorageService {
   if (user == null) throw CustomException(message: 'User not logged in.');
 
   final fileName = 'avatar_${user.id}.jpg';
-  final filePath = 'public/$fileName';
+  final filePath = fileName;
   final bytes = await imageFile.readAsBytes();
 
-  await _client.storage
-      .from('avatars')
-      .uploadBinary(filePath, bytes, fileOptions: const FileOptions(upsert: true));
+  try {
+    // Upload the image to Supabase storage
+    await _client.storage
+        .from('avatars')
+        .uploadBinary(filePath, bytes, fileOptions: const FileOptions(upsert: true));
 
-  // أضف timestamp للرابط لتخطي الكاش
-  final imageUrl = _client.storage.from('avatars').getPublicUrl(filePath);
-  final imageUrlWithBypass = '$imageUrl?ts=${DateTime.now().millisecondsSinceEpoch}';
+    // Get the public URL
+    final imageUrl = _client.storage.from('avatars').getPublicUrl(filePath);
+    final imageUrlWithBypass = '$imageUrl?ts=${DateTime.now().millisecondsSinceEpoch}';
 
-  return imageUrlWithBypass;
+    print('Image uploaded successfully. URL: $imageUrlWithBypass');
+    return imageUrlWithBypass;
+  } catch (e) {
+    print('Error uploading image: $e');
+    rethrow;
+  }
 }
 }
