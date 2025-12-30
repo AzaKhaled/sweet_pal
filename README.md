@@ -17,14 +17,13 @@
 ## 🔑 Highlights
 
 - ✅ supabase 
-- ✅ Restful Api
 - ✅ Home Page Features
 - ✅ Map Integration
 - ✅ Smart Search
 - ✅ Theme Support
 - ✅ Payment Integration
-- ✅Clean & Intuitive UI (Flutter)  
-- ✅Secure & Scalable Architecture  
+- ✅ Clean & Intuitive UI (Flutter)  
+- ✅ Secure & Scalable Architecture  
 
 
 ---
